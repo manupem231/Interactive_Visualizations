@@ -1,5 +1,6 @@
 # import necessary libraries
 import pandas as pd
+import numpy as np
 import csv
 import os
 
@@ -10,20 +11,20 @@ from sqlalchemy import create_engine, func, desc, select
 
 from flask import (Flask, render_template, jsonify)
 
-engine = create_engine("sqlite:///DataSets/belly_button_biodiversity.sqlite")
+# engine = create_engine("sqlite:///DataSets/belly_button_biodiversity.sqlite")
 
-# reflect an existing database into a new model
-Base = automap_base()
-# reflect the tables
-Base.prepare(engine, reflect=True)
+# # reflect an existing database into a new model
+# Base = automap_base()
+# # reflect the tables
+# Base.prepare(engine, reflect=True)
 
-# Save reference to the table
-OTU = Base.classes.otu
-Samples = Base.classes.samples
-Samples_Metadata= Base.classes.samples_metadata
+# # Save reference to the table
+# OTU = Base.classes.otu
+# Samples = Base.classes.samples
+# Samples_Metadata= Base.classes.samples_metadata
 
-# Create our session (link) from Python to the DB
-session = Session(engine)
+# # Create our session (link) from Python to the DB
+# session = Session(engine)
 
 #################################################
 # Reading Data from CSV
@@ -60,7 +61,8 @@ def samples_data():
     """Return Belly Button Biodiversity Sample Names"""
 
     # query for list of sample names
-    result_names = list(biodiversity_samples_df.columns)
+    result_names = list(biodiversity_samples_df)
+    result_names.remove('otu_id')
     return jsonify(result_names)
 
 
@@ -89,7 +91,9 @@ def washing_frequency(sample):
     washing_frequency_df = biodiversity_metadata_df[['SAMPLEID', 'WFREQ']]
     washing_frequency_updated_df = washing_frequency_df[washing_frequency_df['SAMPLEID'] == int(sample[3:])]
     result_washing_frequency = list(washing_frequency_updated_df['WFREQ'])
-    return jsonify(result_washing_frequency)
+    result_wfreq = int(result_washing_frequency[0])
+    return jsonify(result_wfreq)
+
 
 @app.route("/samples/<sample>")
 def OTU_ID_and_Sample(sample):
@@ -103,7 +107,7 @@ def OTU_ID_and_Sample(sample):
         "sample_values": sample_sort_df[sample].values.tolist()
     }]
     sample_data_df = pd.DataFrame(sample_data)
-    final_sample = sample_data_df.to_json(orient='records')
+    final_sample = sample_data_df.to_json(orient = 'records')
     return final_sample
 
 if __name__ == '__main__':
