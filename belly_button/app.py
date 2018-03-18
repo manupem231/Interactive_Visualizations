@@ -30,10 +30,10 @@ from flask import (Flask, render_template, jsonify)
 # Reading Data from CSV
 #################################################
 
-file_biodiversity_samples = os.path.join('DataSets/belly_button_biodiversity_samples.csv')
-file_biodiversity_otu = os.path.join('DataSets/belly_button_biodiversity_otu_id.csv')
-file_biodiversity_metadata = os.path.join('DataSets/Belly_Button_Biodiversity_Metadata.csv')
-file_biodiversity_metadata_columns = os.path.join('DataSets/metadata_columns.csv')
+file_biodiversity_samples = os.path.join('belly_button/DataSets/belly_button_biodiversity_samples.csv')
+file_biodiversity_otu = os.path.join('belly_button/DataSets/belly_button_biodiversity_otu_id.csv')
+file_biodiversity_metadata = os.path.join('belly_button/DataSets/Belly_Button_Biodiversity_Metadata.csv')
+file_biodiversity_metadata_columns = os.path.join('belly_button/DataSets/metadata_columns.csv')
 
 biodiversity_samples_df = pd.read_csv(file_biodiversity_samples)
 biodiversity_otu_df = pd.read_csv(file_biodiversity_otu)
